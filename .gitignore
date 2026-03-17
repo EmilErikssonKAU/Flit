@@ -1,0 +1,6 @@
+build
+
+# In-case build script is not used
+CMakeCache.txt
+CMakeFiles
+Flit
