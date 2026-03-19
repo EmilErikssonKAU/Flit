@@ -1,10 +1,35 @@
 #include "../../include/commands/init.hpp"
 
 #include <filesystem>
+#include <array>
 
-int Init::execute()
+namespace
 {
-    return create_directory();
+    /**
+     * @brief  Init::create_directory helper function for subdirectories
+     *
+     * @return int
+     */
+    int create_subdirectories()
+    {
+        const std::filesystem::path git_directory{".flit"};
+        const std::array<std::filesystem::path, 4> subdirectories{
+            git_directory / "objects"};
+
+        std::error_code error_code;
+
+        for (const std::filesystem::path &subdirectory : subdirectories)
+        {
+            std::filesystem::create_directories(subdirectory, error_code);
+
+            if (error_code)
+            {
+                return -1;
+            }
+        }
+
+        return 1;
+    }
 }
 
 /**
@@ -32,8 +57,23 @@ int Init::create_directory()
 
     if (std::filesystem::create_directory(directory_path, error_code))
     {
-        return 1;
+        // Current design choice is to only create .flit/ subdirectories if .flit/ does not exist
+        if (create_subdirectories())
+        {
+            return 1;
+        }
     }
 
     return -1;
+}
+
+/**
+ * @brief Executing function of init command
+ *
+ * @return   0 if sucessful
+ *          -1 if unsucessful
+ */
+int Init::execute()
+{
+    return create_directory();
 }
