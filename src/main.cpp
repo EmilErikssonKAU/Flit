@@ -1,7 +1,9 @@
 #include <CLI/CLI.hpp>
-
 #include <iostream>
 #include <string>
+
+// Command headers
+#include "../include/commands/init.hpp"
 
 int main(int argc, char **argv)
 {
@@ -11,27 +13,29 @@ int main(int argc, char **argv)
     app.name("Flit");
 
     CLI::App *init_command = app.add_subcommand("init", "Initialize a Flit repository");
-    CLI::App *add_command = app.add_subcommand("add", "Add files to Flit staging area");
-    CLI::App *commit_command = app.add_subcommand("commit", "Commit files in Flit staging area");
 
     CLI11_PARSE(app, argc, argv);
 
     if (*init_command)
     {
-        std::cout << "CLI11 test: init called" << '\n';
-        return 0;
-    }
-    else if (*add_command)
-    {
-        std::cout << "CLI11 test: add called" << "\n";
-        return 0;
-    }
-    else if (*commit_command)
-    {
-        std::cout << "CLI11 test: commit called" << "\n";
-        return 0;
-    }
+        Init init;
+        const int result = init.execute();
 
+        if (result == 1)
+        {
+            std::cout << "Initialized empty Flit repository in .flit\n";
+            return 0;
+        }
+
+        if (result == 0)
+        {
+            std::cout << "Flit repository already exists\n";
+            return 0;
+        }
+
+        std::cerr << "Failed to initialize Flit repository\n";
+        return 1;
+    }
     std::cout << app.help() << '\n';
     return 0;
 }
