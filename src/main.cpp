@@ -13,8 +13,21 @@ int main(int argc, char **argv)
     // Avoid displaying full path
     app.name("Flit");
 
+    // init
     CLI::App *init_command = app.add_subcommand("init", "Initialize a Flit repository");
-    CLI::App *hash_object_command = app.add_subcommand("hash-object", "Hash a flit object");
+
+    // hash-object
+    CLI::App *hash_object_command = app.add_subcommand("hash-object", "Hash a Flit object");
+
+    // options
+    std::string file_path;
+    std::string object_type{"blob"};
+    hash_object_command->add_option("file", file_path)->required();
+    hash_object_command->add_option("-t,--type", object_type, "Specify the object type");
+
+    // flags
+    bool write_flag{false};
+    hash_object_command->add_flag("-w,--write", write_flag, "Write object into object database");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -39,15 +52,18 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    else if (hash_object_command)
+    else if (*hash_object_command)
     {
-        Hash_object hash_object;
+        Hash_object hash_object(file_path, object_type, write_flag);
         const int result = hash_object.execute();
 
         if (result == -1)
         {
             std::cerr << "Failed to execute hash-object";
+            return 1;
         }
+
+        return 0;
     }
 
     std::cout << app.help() << '\n';

@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Pre-release version
 project(Flit VERSION 0.1)
 
+find_package(CLI11 CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED COMPONENTS Crypto)
+
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
 add_executable(Flit ${SOURCE_FILES})
