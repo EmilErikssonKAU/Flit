@@ -10,7 +10,7 @@ public:
         : file_path(file_path),
           object_type(object_type),
           write_flag(write_flag) {}
-    int execute() override;
+    int execute(Repository &repository) override;
 
 private:
     std::string file_path;

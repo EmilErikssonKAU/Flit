@@ -1,10 +1,12 @@
 #include <CLI/CLI.hpp>
+#include <filesystem>
 #include <iostream>
 #include <string>
 
 // Command headers
 #include "../include/commands/init.hpp"
 #include "../include/commands/hash-object.hpp"
+#include "../include/repository/repository.hpp"
 
 int main(int argc, char **argv)
 {
@@ -31,10 +33,12 @@ int main(int argc, char **argv)
 
     CLI11_PARSE(app, argc, argv);
 
+    Repository repository(std::filesystem::current_path());
+
     if (*init_command)
     {
         Init init;
-        const int result = init.execute();
+        const int result = init.execute(repository);
 
         if (result == 1)
         {
@@ -55,7 +59,7 @@ int main(int argc, char **argv)
     else if (*hash_object_command)
     {
         Hash_object hash_object(file_path, object_type, write_flag);
-        const int result = hash_object.execute();
+        const int result = hash_object.execute(repository);
 
         if (result == -1)
         {

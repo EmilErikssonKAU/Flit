@@ -6,8 +6,5 @@ class Init : public FlitCommand
 {
 public:
     Init() = default;
-    int execute() override;
-
-private:
-    int create_directory();
+    int execute(Repository &repository) override;
 };

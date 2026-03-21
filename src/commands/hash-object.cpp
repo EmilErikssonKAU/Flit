@@ -12,7 +12,7 @@
  * @return   0 if sucessful
  *          -1 if unsucessful
  */
-int Hash_object::execute()
+int Hash_object::execute(Repository & /*repository*/)
 {
     std::ifstream file(file_path, std::ios::binary);
     if (!file)

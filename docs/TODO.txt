@@ -1,0 +1,36 @@
+add:     -> create blob
+      -> compare blob against working tree
+      -> write blob if needed
+      -> create index entry
+
+commit:    -> check if index differs from HEAD
+      -> converts index into nested tree object
+      -> identify parent commit
+      -> construct commit payload (tree, parent, author, committer, message)
+      -> hash and store commit (commit <size>\0<payload>)
+      -> update branch reference
+      -> update HEAD
+
+merge:   -> resolve HEAD and target commit
+      -> set merge strategy (ort)
+      -> find merge base
+      -> determine merge type (fast forward, up to date, divergence)
+      -> perform 3-way merge. case analysis per file:
+        case A: unchanged on one side
+        case B: changed identically
+        case C: changed differently
+      -> update working tree
+      -> update index
+      -> user does conflict handling
+
+
+branch:     -> write .flit/refs/heads/feature
+      -> C is current commit.
+         feature -> C
+         main -> C
+
+checkout:    -> resolve the target reference .flit/refs/?
+      -> check for uncommitted files
+      -> update HEAD
+      -> update index
+      -> update working tree
