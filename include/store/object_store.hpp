@@ -13,7 +13,7 @@ class Object_store
 {
 public:
     Object_store(std::filesystem::path root_path)
-        : root_path(root_path);
+        : root_path(root_path) {}
 
 private:
     std::filesystem::path root_path;
