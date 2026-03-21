@@ -6,5 +6,5 @@ class FlitCommand
 {
 public:
     virtual ~FlitCommand() = default;
-    virtual int execute(Repository &repository) = 0;
+    virtual int execute() = 0;
 };

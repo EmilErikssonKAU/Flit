@@ -12,8 +12,9 @@
  * @return   0 if sucessful
  *          -1 if unsucessful
  */
-int Hash_object::execute(Repository & /*repository*/)
+int Hash_object::execute()
 {
+    // ios::binary should be safer
     std::ifstream file(file_path, std::ios::binary);
     if (!file)
     {

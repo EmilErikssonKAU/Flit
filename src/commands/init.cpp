@@ -7,7 +7,7 @@
  * @return   0 if sucessful
  *          -1 if unsucessful
  */
-int Init::execute(Repository &repository)
+int Init::execute()
 {
     return repository.init();
 }

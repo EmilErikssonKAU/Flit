@@ -4,10 +4,10 @@
 #include <system_error>
 
 Repository::Repository(std::filesystem::path worktree)
-    : worktree_path(std::move(worktree)),
+    : worktree_path(worktree),
       repository_path(worktree_path / ".flit"),
-      object_store((repository_path / "objects").string()),
-      ref_store((repository_path / "refs").string())
+      object_store((repository_path / "objects")),
+      ref_store((repository_path / "refs"))
 {
 }
 

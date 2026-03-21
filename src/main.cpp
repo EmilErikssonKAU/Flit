@@ -22,9 +22,9 @@ int main(int argc, char **argv)
     CLI::App *hash_object_command = app.add_subcommand("hash-object", "Hash a Flit object");
 
     // options
-    std::string file_path;
+    std::filesystem::path hash_object_file_path;
     std::string object_type{"blob"};
-    hash_object_command->add_option("file", file_path)->required();
+    hash_object_command->add_option("file", hash_object_file_path)->required();
     hash_object_command->add_option("-t,--type", object_type, "Specify the object type");
 
     // flags
@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 
     if (*init_command)
     {
-        Init init;
-        const int result = init.execute(repository);
+        Init init(repository);
+        const int result = init.execute();
 
         if (result == 1)
         {
@@ -58,8 +58,8 @@ int main(int argc, char **argv)
 
     else if (*hash_object_command)
     {
-        Hash_object hash_object(file_path, object_type, write_flag);
-        const int result = hash_object.execute(repository);
+        Hash_object hash_object(repository, hash_object_file_path, object_type, write_flag);
+        const int result = hash_object.execute();
 
         if (result == -1)
         {

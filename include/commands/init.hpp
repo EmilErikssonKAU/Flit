@@ -5,6 +5,10 @@
 class Init : public FlitCommand
 {
 public:
-    Init() = default;
-    int execute(Repository &repository) override;
+    Init(Repository &repository)
+        : repository(repository) {};
+    int execute() override;
+
+private:
+    Repository &repository;
 };

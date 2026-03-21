@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 /**
  * @brief Stores all .flit/objects (blobs, trees, commits)
@@ -11,8 +12,9 @@
 class Object_store
 {
 public:
-    Object_store(std::string root_path);
+    Object_store(std::filesystem::path root_path)
+        : root_path(root_path);
 
 private:
-    std::string root_path;
+    std::filesystem::path root_path;
 };
