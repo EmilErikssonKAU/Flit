@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../objects/flit_object.hpp"
+
 #include <string>
 #include <filesystem>
 
@@ -14,6 +16,7 @@ class Object_store
 public:
     Object_store(std::filesystem::path root_path)
         : root_path(root_path) {}
+    int write_object(FlitObject &object);
 
 private:
     std::filesystem::path root_path;

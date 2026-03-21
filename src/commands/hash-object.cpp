@@ -36,6 +36,14 @@ int Hash_object::execute()
         return -1;
     }
 
+    if (write_flag)
+    {
+        if (repository.objects().write_object(*object) == -1)
+        {
+            return -1;
+        }
+    }
+
     std::cout << object->getHash() << '\n';
 
     return 0;

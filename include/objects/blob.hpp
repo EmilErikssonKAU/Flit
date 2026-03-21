@@ -7,7 +7,8 @@
 class Blob : public FlitObject
 {
 public:
-    Blob(std::string data) : data(std::move(data)) {}
+    Blob(std::string data)
+        : data(data) {}
     std::string getType() const override
     {
         return "blob";
