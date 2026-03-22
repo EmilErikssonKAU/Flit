@@ -9,12 +9,13 @@ project(Flit VERSION 0.1)
 
 find_package(CLI11 CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED COMPONENTS Crypto)
+find_package(ZLIB REQUIRED);
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
 add_executable(Flit ${SOURCE_FILES})
 
 target_include_directories(Flit PRIVATE src include)
-target_link_libraries(Flit PRIVATE CLI11::CLI11 OpenSSL::Crypto)
+target_link_libraries(Flit PRIVATE CLI11::CLI11 OpenSSL::Crypto ZLIB::ZLIB)
 
 target_compile_options(Flit PRIVATE -Wall)
