@@ -1,4 +1,5 @@
 #include "../../include/store/object_store.hpp"
+#include "../../include/utils/zLibCompression.hpp"
 
 #include <fstream>
 
@@ -7,7 +8,7 @@
  *
  * @param   object
  * @return  0 if sucessful,
- *         -1 if unsucessful
+ *          -1 if unsucessful
  */
 
 int Object_store::write_object(FlitObject &object)
@@ -31,7 +32,7 @@ int Object_store::write_object(FlitObject &object)
         return -1;
     }
 
-    // Write zlib compressed data
+    file << z_compress(object.serialize());
 
     return 0;
 }

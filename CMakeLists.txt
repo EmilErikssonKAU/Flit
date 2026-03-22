@@ -9,7 +9,7 @@ project(Flit VERSION 0.1)
 
 find_package(CLI11 CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED COMPONENTS Crypto)
-find_package(ZLIB REQUIRED);
+find_package(ZLIB REQUIRED)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
