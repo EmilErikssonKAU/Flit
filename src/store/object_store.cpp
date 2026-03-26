@@ -1,5 +1,7 @@
 #include "../../include/store/object_store.hpp"
 #include "../../include/utils/zLibCompression.hpp"
+#include "../../include/utils/serialize.hpp"
+#include "../../include/objects/blob.hpp"
 
 #include <fstream>
 
@@ -58,7 +60,7 @@ int Object_store::write_object(FlitObject &object)
  * @param hash
  * @return The object if it exists, NULL if it doesn't
  */
-FlitObject *Object_store::retrieve_object(const std::string hash)
+std::unique_ptr<FlitObject> Object_store::retrieve_object(const std::string hash)
 {
     std::string folder_name = hash.substr(0, 2);
     std::string file_name = hash.substr(2);
@@ -81,4 +83,15 @@ FlitObject *Object_store::retrieve_object(const std::string hash)
 
     // need to know file contents
     std::string decompressed_data = z_decompress(file_contents);
+    std::string data = deserialize_data(decompressed_data);
+    std::string type = deserialize_type(decompressed_data);
+
+    if (type == "blob")
+    {
+        return std::make_unique<Blob>(data);
+    }
+    else
+    {
+        return nullptr;
+    }
 }

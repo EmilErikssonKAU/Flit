@@ -2,6 +2,7 @@
 
 #include <string>
 #include "../utils/sha256.hpp"
+#include "../utils/serialize.hpp"
 
 class FlitObject
 {
@@ -12,9 +13,7 @@ public:
 
     std::string serialize() const
     {
-        // Standard serializer-format
-        const std::string data = getData();
-        return getType() + " " + std::to_string(data.size()) + '\0' + data;
+        return serialize_object(getData(), getType());
     }
 
     std::string getHash() const

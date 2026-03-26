@@ -6,6 +6,7 @@
 // Command headers
 #include "../include/commands/init.hpp"
 #include "../include/commands/hash-object.hpp"
+#include "../include/commands/cat-file.hpp"
 #include "../include/repository/repository.hpp"
 
 int main(int argc, char **argv)
@@ -30,6 +31,13 @@ int main(int argc, char **argv)
     // flags
     bool write_flag{false};
     hash_object_command->add_flag("-w,--write", write_flag, "Write object into object database");
+
+    // cat-file
+    CLI::App *cat_file_command = app.add_subcommand("cat-file", "Display the contents of a Flit object");
+
+    // options
+    std::string cat_hash;
+    cat_file_command->add_option("hash", cat_hash)->required();
 
     CLI11_PARSE(app, argc, argv);
 
@@ -64,6 +72,20 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute hash-object";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*cat_file_command)
+    {
+        Cat_file cat_file(repository, cat_hash);
+        const int result = cat_file.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute cat-file";
             return 1;
         }
 
