@@ -17,6 +17,7 @@ public:
     Object_store(std::filesystem::path root_path)
         : root_path(root_path) {}
     int write_object(FlitObject &object);
+    FlitObject *retrieve_object(const std::string hash);
 
 private:
     std::filesystem::path root_path;

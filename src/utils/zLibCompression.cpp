@@ -25,22 +25,39 @@ std::string z_compress(const std::string &input)
     return output;
 }
 
-std::string z_decompress(const std::string &input, std::size_t original_size)
+std::string z_decompress(const std::string &input)
 {
-    uLongf output_size = original_size;
-    std::string output(output_size, '\0');
+    z_stream stream{};
+    stream.next_in = reinterpret_cast<Bytef *>(const_cast<char *>(input.data()));
+    stream.avail_in = static_cast<uInt>(input.size());
 
-    const int result = uncompress(
-        reinterpret_cast<Bytef *>(&output[0]),
-        &output_size,
-        reinterpret_cast<const Bytef *>(input.data()),
-        input.size());
-
-    if (result != Z_OK)
+    if (inflateInit(&stream) != Z_OK)
     {
-        throw std::runtime_error("zlib decompression failed");
+        throw std::runtime_error("inflateInit failed");
     }
 
-    output.resize(output_size);
+    std::string output;
+    char buffer[4096];
+
+    int result = Z_OK;
+    do
+    {
+        stream.next_out = reinterpret_cast<Bytef *>(buffer);
+        stream.avail_out = sizeof(buffer);
+
+        result = inflate(&stream, Z_NO_FLUSH);
+
+        if (result != Z_OK && result != Z_STREAM_END)
+        {
+            inflateEnd(&stream);
+            throw std::runtime_error("inflate failed");
+        }
+
+        const std::size_t produced = sizeof(buffer) - stream.avail_out;
+        output.append(buffer, produced);
+
+    } while (result != Z_STREAM_END);
+
+    inflateEnd(&stream);
     return output;
 }
