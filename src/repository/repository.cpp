@@ -2,14 +2,7 @@
 
 #include <array>
 #include <system_error>
-
-Repository::Repository(std::filesystem::path worktree)
-    : worktree_path(worktree),
-      repository_path(worktree_path / ".flit"),
-      object_store((repository_path / "objects")),
-      ref_store((repository_path / "refs"))
-{
-}
+#include <fstream>
 
 int Repository::init()
 {
@@ -30,14 +23,17 @@ int Repository::init()
         return -1;
     }
 
-    return create_store_directories();
+    return create_store_directories_and_files();
 }
 
-int Repository::create_store_directories()
+int Repository::create_store_directories_and_files()
 {
     const std::array<std::filesystem::path, 2> subdirectories{
         repository_path / "objects",
         repository_path / "refs"};
+
+    const std::array<std::filesystem::path, 1> file_paths{
+        repository_path / "index"};
 
     std::error_code error_code;
 
@@ -48,6 +44,18 @@ int Repository::create_store_directories()
         if (error_code)
         {
             return -1;
+        }
+    }
+
+    for (const std::filesystem::path &file_path : file_paths)
+    {
+        if (!std::filesystem::exists(file_path))
+        {
+            std::ofstream file(file_path);
+            if (!file)
+            {
+                return -1;
+            }
         }
     }
 

@@ -39,6 +39,13 @@ int main(int argc, char **argv)
     std::string cat_hash;
     cat_file_command->add_option("hash", cat_hash)->required();
 
+    // add
+    CLI::App *add_command = app.add_subcommand("add", "Add files to the staging area");
+
+    // options
+    std::vector<std::filesystem::path> add_file_paths;
+    add_command->add_option("files", add_file_paths)->required();
+
     CLI11_PARSE(app, argc, argv);
 
     Repository repository(std::filesystem::current_path());
@@ -89,6 +96,11 @@ int main(int argc, char **argv)
             return 1;
         }
 
+        return 0;
+    }
+
+    else if (*add_command)
+    {
         return 0;
     }
 
