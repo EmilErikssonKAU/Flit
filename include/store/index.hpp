@@ -17,10 +17,12 @@ public:
     Index(std::filesystem::path index_path)
         : index_path(index_path) {}
 
-    std::vector<Index_entry> load() const;
     int add(const std::filesystem::path &path, const std::string &object_hash) const;
     int remove(const std::filesystem::path &path) const;
 
 private:
+    std::vector<Index_entry> load() const;
+    int write(const std::vector<Index_entry> &index_entries) const;
+
     std::filesystem::path index_path;
 };
