@@ -4,6 +4,11 @@
 #include <system_error>
 #include <fstream>
 
+/**
+ * @brief Initialize repsitory
+ *
+ * @return 0 upon success, -1 upon failure
+ */
 int Repository::init()
 {
     std::error_code error_code;
@@ -26,6 +31,11 @@ int Repository::init()
     return create_store_directories_and_files();
 }
 
+/**
+ * @brief Helper function to initalizae specififc files and subdirectories
+ *
+ * @return 0 upon success, -1 upon failure
+ */
 int Repository::create_store_directories_and_files()
 {
     const std::array<std::filesystem::path, 2> subdirectories{

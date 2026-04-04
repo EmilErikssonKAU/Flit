@@ -8,6 +8,7 @@
 #include "../include/commands/hash-object.hpp"
 #include "../include/commands/cat-file.hpp"
 #include "../include/repository/repository.hpp"
+#include "../include/commands/add.hpp"
 
 int main(int argc, char **argv)
 {
@@ -101,6 +102,15 @@ int main(int argc, char **argv)
 
     else if (*add_command)
     {
+        Add add(repository, add_file_paths);
+        const int result = add.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute add";
+            return 1;
+        }
+
         return 0;
     }
 
