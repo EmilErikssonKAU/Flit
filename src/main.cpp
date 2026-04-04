@@ -9,6 +9,7 @@
 #include "../include/commands/cat-file.hpp"
 #include "../include/repository/repository.hpp"
 #include "../include/commands/add.hpp"
+#include "../include/commands/status.hpp"
 
 int main(int argc, char **argv)
 {
@@ -46,6 +47,9 @@ int main(int argc, char **argv)
     // options
     std::vector<std::filesystem::path> add_file_paths;
     add_command->add_option("files", add_file_paths)->required();
+
+    // status
+    CLI::App *status_command = app.add_subcommand("status", "View status of staging area");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -108,6 +112,20 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute add";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*status_command)
+    {
+        Status status(repository);
+        const int result = status.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute status";
             return 1;
         }
 

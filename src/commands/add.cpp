@@ -33,6 +33,47 @@ int Add::add_file(std::filesystem::path file_path)
 }
 
 /**
+ * @brief Helper: Add directory into index
+ *
+ * @param directory_path
+ * @return 0 upon success, -1 upon failure
+ */
+int Add::add_directory(std::filesystem::path directory_path)
+{
+    std::error_code error_code;
+
+    // Add every file in directory
+    for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(directory_path))
+    {
+        // if entry is regular file
+        if (entry.is_regular_file(error_code))
+        {
+            if (error_code || add_file(entry.path()) == -1)
+            {
+                return -1;
+            }
+        }
+
+        // if entry is directory
+        else if (std::filesystem::is_directory(entry, error_code))
+        {
+            // likely directory is unaccessible
+            if (error_code)
+            {
+                return -1;
+            }
+
+            if (add_directory(entry) == -1)
+            {
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/**
  * @brief Add supplied filepaths into index
  *
  * @return int 0 upon success, -1 upon failure
@@ -53,23 +94,14 @@ int Add::execute()
                 return -1;
             }
 
-            // Add every file in directory
-            // Note: according to docs should skip subdirectoris at this time
-            for (std::filesystem::directory_entry entry : std::filesystem::directory_iterator(file_path))
+            if (add_directory(file_path) == -1)
             {
-
-                if (entry.is_regular_file(error_code))
-                {
-                    if (error_code || add_file(entry.path()) == -1)
-                    {
-                        return -1;
-                    }
-                }
+                return -1;
             }
         }
 
         // Add single file
-        if (add_file(file_path) == -1)
+        else if (add_file(file_path) == -1)
         {
             return -1;
         }

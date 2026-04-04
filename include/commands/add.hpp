@@ -15,6 +15,7 @@ public:
 
 private:
     int add_file(std::filesystem::path file_path);
+    int add_directory(std::filesystem::path directory_path);
     Repository &repository;
     std::vector<std::filesystem::path> file_paths;
 };
