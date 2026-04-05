@@ -52,7 +52,7 @@ std::vector<std::filesystem::path> Status::getUntracked()
         // lexically_normal cleans relaive path
         const std::filesystem::path relative_path = std::filesystem::relative(entry.path(), worktree).lexically_normal();
 
-        if (std::find(tracked_paths.begin(), tracked_paths.end(), relative_path) == tracked_paths.end())
+        if (std::find(tracked_paths.begin(), tracked_paths.end(), relative_path) == tracked_paths.end() && !repository.ignore().matches(relative_path))
         {
             untracked_files.push_back(relative_path);
         }

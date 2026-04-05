@@ -3,6 +3,7 @@
 #include "../store/object_store.hpp"
 #include "../store/ref_store.hpp"
 #include "../store/index.hpp"
+#include "ignore.hpp"
 
 #include <filesystem>
 
@@ -14,7 +15,8 @@ public:
           repository_path(worktree_path / ".flit"),
           object_store((repository_path / "objects")),
           ref_store((repository_path / "refs")),
-          index_store((repository_path / "index"))
+          index_store((repository_path / "index")),
+          flit_ignore(worktree)
     {
     }
 
@@ -32,7 +34,13 @@ public:
     {
         return index_store;
     }
-    std::filesystem::path worktree() const
+
+    const Ignore &ignore()
+    {
+        return flit_ignore;
+    }
+
+    const std::filesystem::path worktree() const
     {
         return worktree_path;
     }
@@ -45,4 +53,5 @@ private:
     Object_store object_store;
     Ref_store ref_store;
     Index index_store;
+    Ignore flit_ignore;
 };
