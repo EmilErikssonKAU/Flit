@@ -28,11 +28,21 @@ int Repository::init()
         return -1;
     }
 
-    return create_store_directories_and_files();
+    int res = create_store_directories_and_files();
+
+    if (res == -1)
+    {
+        return -1;
+    }
+
+    ref_store.write_HEAD("refs/heads/main");
+    ref_store.write_ref("refs/heads/main", "");
+
+    return res;
 }
 
 /**
- * @brief Helper function to initalizae specififc files and subdirectories
+ * @brief Helper function to initalize specififc files and subdirectories
  *
  * @return 0 upon success, -1 upon failure
  */
@@ -40,7 +50,7 @@ int Repository::create_store_directories_and_files()
 {
     const std::array<std::filesystem::path, 2> subdirectories{
         repository_path / "objects",
-        repository_path / "refs"};
+        repository_path / "refs" / "heads"};
 
     const std::array<std::filesystem::path, 1> file_paths{
         repository_path / "index"};
