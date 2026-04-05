@@ -32,6 +32,10 @@ public:
     {
         return index_store;
     }
+    std::filesystem::path worktree() const
+    {
+        return worktree_path;
+    }
 
 private:
     int create_store_directories_and_files();

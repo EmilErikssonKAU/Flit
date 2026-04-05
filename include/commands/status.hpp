@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../objects/blob.hpp"
+#include "../store/index.hpp"
 #include "flit_command.hpp"
 #include <filesystem>
 #include <vector>
@@ -15,5 +16,8 @@ public:
     int execute() override;
 
 private:
+    std::vector<std::filesystem::path> getStaged();
+    std::vector<std::filesystem::path> getUntracked();
+    std::vector<std::filesystem::path> getUnstaged();
     Repository &repository;
 };
