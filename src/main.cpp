@@ -10,6 +10,7 @@
 #include "../include/repository/repository.hpp"
 #include "../include/commands/add.hpp"
 #include "../include/commands/status.hpp"
+#include "../include/commands/commit.hpp"
 
 int main(int argc, char **argv)
 {
@@ -50,6 +51,13 @@ int main(int argc, char **argv)
 
     // status
     CLI::App *status_command = app.add_subcommand("status", "View status of staging area");
+
+    // commit
+    CLI::App *commit_command = app.add_subcommand("commit", "Commit files in the staging area");
+
+    //options
+    std::string message;
+    commit_command->add_option("-m, --message", message, "Message for commit")->required();
 
     CLI11_PARSE(app, argc, argv);
 
@@ -126,6 +134,20 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute status";
+            return 1;
+        }
+
+        return 0;
+    }
+
+        else if (*commit_command)
+    {
+        Commit commit(repository, message);
+        const int result = commit.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute commit";
             return 1;
         }
 

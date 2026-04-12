@@ -1,4 +1,5 @@
 .flit
+.flitignore
 build
 
 # In-case build script is not used
