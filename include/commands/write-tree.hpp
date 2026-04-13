@@ -1,6 +1,7 @@
 #pragma once
 
 #include "flit_command.hpp"
+#include "../objects/tree.hpp"
 #include <string>
 #include <filesystem>
 
@@ -10,7 +11,12 @@ public:
     Write_tree(Repository &repository)
         : repository(repository) {}
     int execute() override;
+    Tree &getTree()
+    {
+        return tree;
+    }
 
 private:
+    Tree tree;
     Repository &repository;
 };

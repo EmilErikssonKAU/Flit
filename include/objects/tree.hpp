@@ -14,15 +14,18 @@ enum class TreeEntryType
 
 struct TreeEntry
 {
-    std::filesystem::path name;      
-    std::string object_hash;       
+    std::filesystem::path name;
+    std::string object_hash;
     TreeEntryType type;
 };
 
 class Tree : public FlitObject
 {
 public:
-    Tree(std::vector<TreeEntry> entries);
+    Tree()
+        : tree_entries() {}
+    Tree(std::vector<TreeEntry> entries)
+        : tree_entries(entries) {}
 
     std::string getType() const override
     {

@@ -5,34 +5,29 @@
 
 namespace
 {
-bool isNameBefore(TreeEntry left, TreeEntry right)
-{
-    return left.name.generic_string() < right.name.generic_string();
-}
-
-std::vector<TreeEntry> sortByName(std::vector<TreeEntry> entries)
-{
-    std::sort(entries.begin(), entries.end(), isNameBefore);
-    return entries;
-}
-
-std::optional<TreeEntryType> parseEntryType(std::string type_string)
-{
-    if (type_string == "blob")
+    bool isNameBefore(TreeEntry left, TreeEntry right)
     {
-        return TreeEntryType::Blob;
+        return left.name.generic_string() < right.name.generic_string();
     }
-    if (type_string == "tree")
-    {
-        return TreeEntryType::Tree;
-    }
-    return std::nullopt;
-}
-}
 
-Tree::Tree(std::vector<TreeEntry> entries)
-    : tree_entries(entries)
-{
+    std::vector<TreeEntry> sortByName(std::vector<TreeEntry> entries)
+    {
+        std::sort(entries.begin(), entries.end(), isNameBefore);
+        return entries;
+    }
+
+    std::optional<TreeEntryType> parseEntryType(std::string type_string)
+    {
+        if (type_string == "blob")
+        {
+            return TreeEntryType::Blob;
+        }
+        if (type_string == "tree")
+        {
+            return TreeEntryType::Tree;
+        }
+        return std::nullopt;
+    }
 }
 
 std::string Tree::serializeEntry(TreeEntry entry) const
@@ -64,7 +59,7 @@ std::string Tree::getData() const
         data += serializeEntry(entry);
     }
     return data;
-} 
+}
 
 std::vector<TreeEntry> Tree::parseData(std::string data)
 {

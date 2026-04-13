@@ -42,7 +42,7 @@ Tree buildTree(DirNode &root, Object_store &object_store)
         Tree childTree = buildTree(child, object_store);
         if (object_store.write_object(childTree) == -1)
         {
-            return Tree({});
+            return Tree(std::vector<TreeEntry>{});
         }
 
         std::string childHash = childTree.getHash();
@@ -75,5 +75,6 @@ int Write_tree::execute()
     }
 
     std::cout << root_tree.getHash() << '\n';
+    tree = root_tree;
     return 0;
 }

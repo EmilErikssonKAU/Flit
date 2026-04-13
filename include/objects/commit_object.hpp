@@ -7,17 +7,15 @@
 class CommitObject : public FlitObject
 {
 public:
-    CommitObject(std::string data)
-        : data(data) {}
+    CommitObject(std::string tree_hash, std::string message)
+        : tree_hash(tree_hash), message(message) {}
     std::string getType() const override
     {
         return "commit";
     };
-    std::string getData() const override
-    {
-        return data;
-    };
+    std::string getData() const override;
 
 private:
-    std::string data;
+    std::string tree_hash;
+    std::string message;
 };
