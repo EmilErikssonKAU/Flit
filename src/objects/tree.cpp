@@ -30,6 +30,11 @@ std::optional<TreeEntryType> parseEntryType(std::string type_string)
 }
 }
 
+Tree::Tree(std::vector<TreeEntry> entries)
+    : tree_entries(entries)
+{
+}
+
 std::string Tree::serializeEntry(TreeEntry entry) const
 {
     std::string type_string;

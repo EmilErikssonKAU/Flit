@@ -11,6 +11,7 @@
 #include "../include/commands/add.hpp"
 #include "../include/commands/status.hpp"
 #include "../include/commands/commit.hpp"
+#include "../include/commands/write-tree.hpp"
 
 int main(int argc, char **argv)
 {
@@ -58,6 +59,9 @@ int main(int argc, char **argv)
     //options
     std::string message;
     commit_command->add_option("-m, --message", message, "Message for commit")->required();
+
+    // write-tree
+    CLI::App *write_tree_command = app.add_subcommand("write-tree", "Write current index to disk");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -140,7 +144,7 @@ int main(int argc, char **argv)
         return 0;
     }
 
-        else if (*commit_command)
+    else if (*commit_command)
     {
         Commit commit(repository, message);
         const int result = commit.execute();
@@ -148,6 +152,19 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute commit";
+            return 1;
+        }
+
+        return 0;
+    }
+    else if (*write_tree_command)
+    {
+        Write_tree write_tree(repository);
+        const int result = write_tree.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute write-tree";
             return 1;
         }
 
