@@ -2,6 +2,8 @@
 #include "../../include/utils/zLibCompression.hpp"
 #include "../../include/utils/serialize.hpp"
 #include "../../include/objects/blob.hpp"
+#include "../../include/objects/tree.hpp"
+#include "../../include/objects/commit_object.hpp"
 
 #include <fstream>
 
@@ -89,6 +91,24 @@ std::unique_ptr<FlitObject> Object_store::retrieve_object(const std::string hash
     if (type == "blob")
     {
         return std::make_unique<Blob>(data);
+    }
+    else if (type == "tree")
+    {
+        std::vector<TreeEntry> entries = Tree::parseData(data);
+        if (entries.empty())
+        {
+            return nullptr;
+        }
+        return std::make_unique<Tree>(entries);
+    }
+    else if (type == "commit")
+    {
+        CommitObject::ParsedData parsed = CommitObject::parseData(data);
+        if (parsed.tree_hash.empty())
+        {
+            return nullptr;
+        }
+        return std::make_unique<CommitObject>(parsed.tree_hash, parsed.message, parsed.parent_commit_hash);
     }
     else
     {

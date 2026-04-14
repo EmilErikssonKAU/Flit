@@ -14,7 +14,7 @@ public:
         : worktree_path(worktree),
           repository_path(worktree_path / ".flit"),
           object_store((repository_path / "objects")),
-          ref_store((repository_path / "refs")),
+          ref_store(repository_path),
           index_store((repository_path / "index")),
           flit_ignore(worktree)
     {

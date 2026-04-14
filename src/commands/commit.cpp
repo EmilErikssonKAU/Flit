@@ -12,10 +12,22 @@ int Commit::execute()
         return -1;
     }
 
-    CommitObject commit_object(write_tree.getTree().getHash(), message);
-    repository.objects().write_object(commit_object);
-
     std::optional<std::string> head = repository.refs().read_HEAD();
+    if (!head.has_value())
+    {
+        return -1;
+    }
+
+    std::filesystem::path head_path = *head;
+
+    std::optional<std::string> parent_commit_hash = repository.refs().read_ref(head_path);
+    const std::string parent_hash = parent_commit_hash.value_or("");
+
+    CommitObject commit_object(write_tree.getTree().getHash(), message, parent_hash);
+    if (repository.objects().write_object(commit_object) == -1)
+    {
+        return -1;
+    }
 
     if (repository.refs().write_ref(head.value(), commit_object.getHash()) == -1)
     {

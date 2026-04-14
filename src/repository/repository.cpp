@@ -35,8 +35,15 @@ int Repository::init()
         return -1;
     }
 
-    ref_store.write_HEAD("refs/heads/main");
-    ref_store.write_ref("refs/heads/main", "");
+    if (ref_store.write_HEAD("refs/heads/main") == -1)
+    {
+        return -1;
+    }
+
+    if (ref_store.write_ref("refs/heads/main", "") == -1)
+    {
+        return -1;
+    }
 
     return res;
 }

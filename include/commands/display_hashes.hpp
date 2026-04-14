@@ -6,14 +6,13 @@
 #include <vector>
 #include <fstream>
 
-class Commit : public FlitCommand
+class Display_hashes : public FlitCommand
 {
 public:
-    Commit(Repository &repository, std::string message)
-        : message(message), repository(repository) {};
+    Display_hashes(Repository &repository)
+        : repository(repository) {};
     int execute() override;
 
 private:
-    std::string message;
     Repository &repository;
 };

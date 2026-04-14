@@ -12,6 +12,8 @@
 #include "../include/commands/status.hpp"
 #include "../include/commands/commit.hpp"
 #include "../include/commands/write-tree.hpp"
+#include "../include/commands/log.hpp"
+#include "../include/commands/display_hashes.hpp"
 
 int main(int argc, char **argv)
 {
@@ -56,12 +58,18 @@ int main(int argc, char **argv)
     // commit
     CLI::App *commit_command = app.add_subcommand("commit", "Commit files in the staging area");
 
-    //options
+    // options
     std::string message;
     commit_command->add_option("-m, --message", message, "Message for commit")->required();
 
     // write-tree
     CLI::App *write_tree_command = app.add_subcommand("write-tree", "Write current index to disk");
+
+    // log
+    CLI::App *log_command = app.add_subcommand("log", "View commit log");
+
+    // display-hashes
+    CLI::App *display_hashes_command = app.add_subcommand("display-hashes", "Display list of hashes");
 
     CLI11_PARSE(app, argc, argv);
 
@@ -165,6 +173,34 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute write-tree";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*log_command)
+    {
+        Log log(repository);
+        const int result = log.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute log";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*display_hashes_command)
+    {
+        Display_hashes display_hashes(repository);
+        const int result = display_hashes.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute display-hashes";
             return 1;
         }
 
