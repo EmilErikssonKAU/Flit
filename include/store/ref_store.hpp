@@ -23,6 +23,7 @@ public:
 
     std::optional<std::string> read_ref(std::filesystem::path ref_path) const;
     int write_ref(std::filesystem::path ref_path, std::string value) const;
+    int delete_ref(std::filesystem::path) const;
 
 private:
     std::filesystem::path root_path;

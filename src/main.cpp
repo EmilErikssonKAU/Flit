@@ -14,6 +14,7 @@
 #include "../include/commands/write-tree.hpp"
 #include "../include/commands/log.hpp"
 #include "../include/commands/display_hashes.hpp"
+#include "../include/commands/branch.hpp"
 
 int main(int argc, char **argv)
 {
@@ -71,6 +72,17 @@ int main(int argc, char **argv)
     // display-hashes
     CLI::App *display_hashes_command = app.add_subcommand("display-hashes", "Display list of hashes");
 
+    // branch
+    CLI::App *branch_command = app.add_subcommand("branch", "Create/delete a branch");
+
+    // options
+    std::string target_branch_name;
+    CLI::Option *branch_name_option = branch_command->add_option("branch", target_branch_name, "Target branch");
+
+    // flags
+    bool delete_flag{false};
+    branch_command->add_flag("-d,--delete", delete_flag, "Delete branch")->needs(branch_name_option);
+
     CLI11_PARSE(app, argc, argv);
 
     Repository repository(std::filesystem::current_path());
@@ -103,7 +115,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute hash-object";
+            std::cerr << "Failed to execute hash-object\n";
             return 1;
         }
 
@@ -117,7 +129,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute cat-file";
+            std::cerr << "Failed to execute cat-file\n";
             return 1;
         }
 
@@ -131,7 +143,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute add";
+            std::cerr << "Failed to execute add\n";
             return 1;
         }
 
@@ -145,7 +157,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute status";
+            std::cerr << "Failed to execute status\n";
             return 1;
         }
 
@@ -159,7 +171,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute commit";
+            std::cerr << "Failed to execute commit\n";
             return 1;
         }
 
@@ -172,7 +184,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute write-tree";
+            std::cerr << "Failed to execute write-tree\n";
             return 1;
         }
 
@@ -186,7 +198,7 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute log";
+            std::cerr << "Failed to execute log\n";
             return 1;
         }
 
@@ -200,7 +212,21 @@ int main(int argc, char **argv)
 
         if (result == -1)
         {
-            std::cerr << "Failed to execute display-hashes";
+            std::cerr << "Failed to execute display-hashes\n";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*branch_command)
+    {
+        Branch branch(repository, target_branch_name, delete_flag);
+        const int result = branch.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute branch\n";
             return 1;
         }
 

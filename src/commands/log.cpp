@@ -28,16 +28,6 @@ int Log::execute()
 
     while (current_hash.has_value())
     {
-        if (current_hash->empty())
-        {
-            break;
-        }
-
-        // Safety guard against corrupt cyclic history.
-        if (visited.find(*current_hash) != visited.end())
-        {
-            return -1;
-        }
         visited.insert(*current_hash);
 
         std::unique_ptr<FlitObject> object = repository.objects().retrieve_object(*current_hash);

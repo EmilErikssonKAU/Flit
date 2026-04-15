@@ -72,3 +72,22 @@ int Ref_store::write_ref(std::filesystem::path ref_path, std::string value) cons
     file << value;
     return 0;
 }
+
+int Ref_store::delete_ref(std::filesystem::path ref_path) const
+{
+    std::error_code error_code;
+    const std::filesystem::path full_path = root_path / ref_path;
+
+    if (!std::filesystem::exists(full_path, error_code) || error_code)
+    {
+        return -1;
+    }
+
+    const bool removed = std::filesystem::remove(full_path, error_code);
+    if (!removed || error_code)
+    {
+        return -1;
+    }
+
+    return 0;
+}
