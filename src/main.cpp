@@ -15,6 +15,7 @@
 #include "../include/commands/log.hpp"
 #include "../include/commands/display_hashes.hpp"
 #include "../include/commands/branch.hpp"
+#include "../include/commands/checkout.hpp"
 
 int main(int argc, char **argv)
 {
@@ -82,6 +83,13 @@ int main(int argc, char **argv)
     // flags
     bool delete_flag{false};
     branch_command->add_flag("-d,--delete", delete_flag, "Delete branch")->needs(branch_name_option);
+
+    // checkout
+    CLI::App *checkout_command = app.add_subcommand("checkout", "Checkout target branch/hash");
+
+    // options
+    std::string target_checkout;
+    checkout_command->add_option("target", target_checkout, "Target branch/hash")->required();
 
     CLI11_PARSE(app, argc, argv);
 
@@ -227,6 +235,20 @@ int main(int argc, char **argv)
         if (result == -1)
         {
             std::cerr << "Failed to execute branch\n";
+            return 1;
+        }
+
+        return 0;
+    }
+
+    else if (*checkout_command)
+    {
+        Checkout checkout(repository, target_checkout);
+        const int result = checkout.execute();
+
+        if (result == -1)
+        {
+            std::cerr << "Failed to execute checkout\n";
             return 1;
         }
 
